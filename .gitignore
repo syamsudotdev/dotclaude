@@ -1,0 +1,54 @@
+# Session / conversation state
+history.jsonl
+projects/
+sessions/
+session-env/
+file-history/
+shell-snapshots/
+
+# Runtime
+daemon*
+jobs/
+cache/
+plans/
+tasks/
+paste-cache/
+
+# Analytics / telemetry
+stats-cache.json
+statsig/
+telemetry/
+usage-data/
+debug/
+
+# Plugins (reinstallable, see README.md)
+plugins/
+
+# Google skills (Apache 2.0, reinstallable, see README.md)
+skills/agp-9-upgrade/
+skills/edge-to-edge/
+skills/migrate-xml-views-to-jetpack-compose/
+skills/navigation-3/
+skills/play-billing-library-version-upgrade/
+skills/r8-analyzer/
+
+# Misc ephemeral
+backups/
+downloads/
+transcripts/
+todos/
+notes/
+ide/
+commands/
+memory/
+mcp-needs-auth-cache.json
+.last-cleanup
+.DS_Store
+.claude/
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+# Hook artifacts
+hooks/.rtk-hook.sha256

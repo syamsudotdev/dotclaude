@@ -1,0 +1,13 @@
+#!/bin/bash
+# Gate hook: nudges Claude toward android-studio-index MCP for code navigation.
+# First Grep/Glob per conversation -> block once, then allow.
+# Uses CLAUDE_CONVERSATION_ID (stable within conversation) with fallback.
+SESSION_KEY="${CLAUDE_CONVERSATION_ID:-${CLAUDE_SESSION_ID:-global}}"
+GATE="/tmp/android-studio-index-gate-${SESSION_KEY}"
+find /tmp -name 'android-studio-index-gate-*' -mmin +120 -delete 2>/dev/null
+if [ -f "$GATE" ]; then
+    exit 0
+fi
+touch "$GATE"
+echo 'BLOCKED (once/session). android-studio-index MCP PREFERRED for code navigation: ide_search_text, ide_find_file, ide_find_class, ide_find_references, ide_find_definition, ide_find_implementations, ide_type_hierarchy, ide_call_hierarchy. Use Grep/Glob only as fallback when MCP cannot locate. Retry.' >&2
+exit 2

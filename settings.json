@@ -1,0 +1,76 @@
+{
+  "env": {
+    "CHROME_PATH": "/Applications/Vivaldi.app/Contents/MacOS/Vivaldi"
+  },
+  "includeCoAuthoredBy": false,
+  "model": "claude-opus-4-6[1m]",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "/Users/nrsys/.claude/hooks/rtk-rewrite.sh"
+          }
+        ]
+      },
+      {
+        "matcher": "Grep|Glob",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "case \"$CLAUDE_PROJECT_DIR\" in */99*|*android*) exit 0;; esac; ~/.claude/hooks/cbm-code-discovery-gate"
+          },
+          {
+            "type": "command",
+            "command": "case \"$CLAUDE_PROJECT_DIR\" in */99*|*android*) ~/.claude/hooks/android-studio-index-gate;; esac"
+          }
+        ]
+      },
+      {
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -r '.tool_input.file_path // empty' | { read -r f; if echo \"$f\" | grep -q '.claude-team99' && echo \"$f\" | grep -q '/memory/'; then printf '{\"hookSpecificOutput\":{\"hookEventName\":\"PreToolUse\",\"permissionDecision\":\"ask\",\"permissionDecisionReason\":\"Memory write: %s\"}}' \"$f\"; fi; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "jq -e '.tool_input | has(\"offset\") or has(\"limit\")' >/dev/null || { echo 'BLOCKED: Read must specify offset or limit param (keep context tight). Use offset+limit for a range, or limit alone for first N lines.' >&2; exit 2; }"
+          }
+        ]
+      }
+    ]
+  },
+  "statusLine": {
+    "type": "command",
+    "command": "bash ~/.claude/statusline-script.sh"
+  },
+  "enabledPlugins": {
+    "atlassian@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "claude-mem@thedotmack": false,
+    "frontend-design@claude-plugins-official": true
+  },
+  "extraKnownMarketplaces": {
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
+  },
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "medium",
+  "showThinkingSummaries": true,
+  "skipDangerousModePermissionPrompt": true,
+  "inputNeededNotifEnabled": false,
+  "agentPushNotifEnabled": true,
+  "gitAttribution": false
+}
