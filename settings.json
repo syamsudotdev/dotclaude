@@ -55,7 +55,7 @@
   "enabledPlugins": {
     "atlassian@claude-plugins-official": true,
     "context7@claude-plugins-official": true,
-    "claude-mem@thedotmack": false,
+    "claude-mem@thedotmack": true,
     "frontend-design@claude-plugins-official": true
   },
   "extraKnownMarketplaces": {
