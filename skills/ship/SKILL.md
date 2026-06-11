@@ -13,7 +13,10 @@ Verify + commit + push pipeline. Nothing ships without passing verification.
 ## Steps
 
 ### 1. Verify
-Run the full `/verify` pipeline (format → compile → test). **If any step fails, STOP. Do not proceed to commit.**
+Run the full `/verify` pipeline (format → compile/typecheck → test). `/verify` is
+**stack-agnostic** — it detects the project's language(s)/tooling and runs the
+right commands (and verifies every stack whose files changed in a multi-stack
+repo). **If any step fails, STOP. Do not proceed to commit.**
 
 ### 2. Review staged changes
 ```bash
@@ -24,12 +27,12 @@ git diff
 Show the user what will be committed. Stage specific files only — never `git add -A` or `git add .`.
 
 ### 3. Commit
-- Use conventional commit format: `feat(module):`, `fix(module):`, `refactor(module):`, `test(module):`, `docs(module):`
+- Default to conventional commit format: `feat(scope):`, `fix(scope):`, `refactor(scope):`, `test(scope):`, `docs(scope):` — but if the repo's own `git log` follows a different convention, match that instead.
 - 1-2 sentence message focused on "why" not "what"
 - Use HEREDOC format:
 ```bash
 git commit -m "$(cat <<'EOF'
-feat(cobroke): add watchlist toggle with optimistic UI update
+feat(auth): add token refresh with optimistic retry
 EOF
 )"
 ```

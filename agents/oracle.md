@@ -13,7 +13,7 @@ tools:
   - mcp__plugin_claude-mem_mcp-search__search
   - mcp__plugin_claude-mem_mcp-search__get_observations
   - mcp__plugin_claude-mem_mcp-search__smart_search
-effort: high
+effort: xhigh
 maxTurns: 20
 color: purple
 ---
