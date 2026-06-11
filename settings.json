@@ -3,25 +3,11 @@
     "CHROME_PATH": "/Applications/Vivaldi.app/Contents/MacOS/Vivaldi"
   },
   "includeCoAuthoredBy": false,
-  "model": "claude-opus-4-6[1m]",
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "/Users/nrsys/.claude/hooks/rtk-rewrite.sh"
-          }
-        ]
-      },
-      {
         "matcher": "Grep|Glob",
         "hooks": [
-          {
-            "type": "command",
-            "command": "case \"$CLAUDE_PROJECT_DIR\" in */99*|*android*) exit 0;; esac; ~/.claude/hooks/cbm-code-discovery-gate"
-          },
           {
             "type": "command",
             "command": "case \"$CLAUDE_PROJECT_DIR\" in */99*|*android*) ~/.claude/hooks/android-studio-index-gate;; esac"
@@ -43,6 +29,19 @@
           {
             "type": "command",
             "command": "jq -e '.tool_input | has(\"offset\") or has(\"limit\")' >/dev/null || { echo 'BLOCKED: Read must specify offset or limit param (keep context tight). Use offset+limit for a range, or limit alone for first N lines.' >&2; exit 2; }"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rtk hook claude"
+          },
+          {
+            "type": "command",
+            "command": "jq -c 'if (.tool_input.command|test(\"^\\\\s*sed(\\\\s|$)\")) and ((.tool_input.command|test(\"(^|\\\\s)(-[a-zA-Z]*i([\\\\s=.]|$)|--in-place)\"))|not) then {hookSpecificOutput:{hookEventName:\"PreToolUse\",permissionDecision:\"allow\",permissionDecisionReason:\"sed read-only (no -i)\"}} else empty end'"
           }
         ]
       }
@@ -67,10 +66,11 @@
     }
   },
   "alwaysThinkingEnabled": true,
-  "effortLevel": "medium",
+  "effortLevel": "low",
   "showThinkingSummaries": true,
   "skipDangerousModePermissionPrompt": true,
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
-  "gitAttribution": false
+  "gitAttribution": false,
+  "tui": "fullscreen"
 }
